@@ -1,12 +1,13 @@
 ---
-title: Stac Sst Insitu
+title: Stac SST Insitu
 emoji: 📉
 colorFrom: gray
 colorTo: red
 sdk: docker
 pinned: false
 license: apache-2.0
-short_description: Combined STAC catalog for satellite SST and in-situ data
+short_description: Combined STAC catalog for satellite SST imagery and in-situ data
+app_port: 9588
 ---
 
-Check out the configuration reference at https://huggingface.co/docs/hub/spaces-config-reference
+# Combined STAC catalog for satellite SST imagery and in-situ data
