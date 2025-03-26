@@ -35,8 +35,6 @@ ENV POSTGRES_HOST_WRITER 0.0.0.0
 ENV APP_HOST 0.0.0.0
 ENV APP_PORT 9588
 
-RUN find / -name "postgresql.conf" && sleep 10
-
 RUN mkdir -p /app
 # configure and populate the database
 COPY --chown=postgres postgres-data /var/lib/postgresql/data
