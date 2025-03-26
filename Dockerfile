@@ -35,6 +35,7 @@ ENV POSTGRES_HOST_WRITER 0.0.0.0
 ENV APP_HOST 0.0.0.0
 ENV APP_PORT 9588
 
+RUN mkdir -p /app
 # configure and populate the database
 COPY --chown=pgstac postgres-data /var/lib/postgresql/data
 
