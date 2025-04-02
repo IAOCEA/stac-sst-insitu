@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+set -euo pipefail
+
 # start and configure postgresql
 echo "-- starting postgresql";
 service postgresql start
@@ -15,6 +17,7 @@ echo "-- initializing database";
 echo "CREATE DATABASE postgis;" | sudo -u postgres psql
 dsn="postgresql://${POSTGRES_USER}:${POSTGRES_PASS}@127.0.0.1:5432/postgis"
 pypgstac migrate --dsn="$dsn"
+python ingest.py contents
 
 # stop postgresql
 service postgresql stop

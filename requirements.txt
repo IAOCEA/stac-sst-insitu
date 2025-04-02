@@ -1,1 +1,3 @@
 stac-fastapi.pgstac[server]
+pypgstac[psycopg]
+click

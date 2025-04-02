@@ -7,8 +7,9 @@ repos:
     rev: v5.0.0
     hooks:
       - id: trailing-whitespace
+        exclude_types: ["sql"]
       - id: end-of-file-fixer
-        exclude: "^postgres-data/"
+        exclude_types: ["sql"]
       - id: check-docstring-first
       - id: check-yaml
       - id: check-toml

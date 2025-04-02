@@ -1,9 +1,9 @@
-FROM ghcr.io/stac-utils/pgstac:v0.9.2 as base
+FROM python:3.12-slim-bookworm as base
 
 # install postgres and postgis
 RUN apt-get update && \
     apt-get -y upgrade && \
-    apt-get install -y sudo supervisor python3-pip python3
+    apt-get install -y sudo postgresql postgis supervisor python3-pip python3
 
 # add a dedicated user
 RUN useradd --uid 1000 -U -G ssl-cert,postgres pgstac
@@ -35,19 +35,21 @@ ENV POSTGRES_HOST_WRITER 0.0.0.0
 ENV APP_HOST 0.0.0.0
 ENV APP_PORT 9588
 
-RUN mkdir -p /app
+RUN mkdir -p /app; chown pgstac:pgstac /app
 # configure and populate the database
-COPY --chown=postgres postgres-data /var/lib/postgresql/data
+COPY --chown=pgstac contents/ /app/contents/
+COPY --chown=pgstac ingest.py /app
+COPY --chown=pgstac --chmod=0755 setup-database.sh /app
+WORKDIR /app
+RUN ./setup-database.sh
 
 # run the postgresql database and the stac server
 COPY --chown=pgstac supervisord.conf /etc/supervisor/supervisord.conf
-COPY --chown=pgstac --chmod=0755 setup-database.sh /app
 COPY --chown=pgstac --chmod=0755 run-supervisor.sh /app
 COPY --chown=pgstac --chmod=0755 run-postgresql.sh /app
 COPY --chown=pgstac --chmod=0755 run-stacserver.sh /app
 RUN chown -R pgstac:pgstac /var/run/postgresql \
-    && chown -R pgstac:pgstac /var/lib/postgresql/ \
-    && chmod -R 0700 /var/lib/postgresql/data
+    && chown -R pgstac:pgstac /var/lib/postgresql/
 
 USER pgstac
 ENTRYPOINT ["/app/run-supervisor.sh"]
