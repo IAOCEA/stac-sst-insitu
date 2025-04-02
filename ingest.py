@@ -8,7 +8,7 @@ from pypgstac.load import Loader, Methods
 
 def open_jsonl(path):
     with open(path) as f:
-        return [json.loads(line.strip()) for line in f]
+        return [json.loads(line.strip()) for line in f if line.strip()]
 
 
 @click.command()
