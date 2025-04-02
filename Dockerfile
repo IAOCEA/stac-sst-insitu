@@ -35,13 +35,15 @@ ENV POSTGRES_HOST_WRITER 0.0.0.0
 ENV APP_HOST 0.0.0.0
 ENV APP_PORT 9588
 
-RUN mkdir -p /app
+RUN mkdir -p /app; chown pgstac:pgstac /app
 # configure and populate the database
-COPY --chown=postgres postgres-data /var/lib/postgresql/data
+COPY --chown=postgres postgis.sql /app
+COPY --chown=pgstac --chmod=0755 setup-database.sh /app
+WORKDIR /app
+RUN ./setup-database.sh
 
 # run the postgresql database and the stac server
 COPY --chown=pgstac supervisord.conf /etc/supervisor/supervisord.conf
-COPY --chown=pgstac --chmod=0755 setup-database.sh /app
 COPY --chown=pgstac --chmod=0755 run-supervisor.sh /app
 COPY --chown=pgstac --chmod=0755 run-postgresql.sh /app
 COPY --chown=pgstac --chmod=0755 run-stacserver.sh /app
