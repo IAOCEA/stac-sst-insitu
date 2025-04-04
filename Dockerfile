@@ -3,7 +3,7 @@ FROM python:3.12-slim-bookworm as base
 # install postgres and postgis
 RUN apt-get update && \
     apt-get -y upgrade && \
-    apt-get install -y sudo postgresql postgis supervisor python3-pip python3
+    apt-get install -y sudo postgresql postgis supervisor python3-pip python3 zstd
 
 # add a dedicated user
 RUN useradd --uid 1000 -U -G ssl-cert,postgres pgstac

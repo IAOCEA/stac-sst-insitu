@@ -17,6 +17,10 @@ echo "-- initializing database";
 echo "CREATE DATABASE postgis;" | sudo -u postgres psql
 dsn="postgresql://${POSTGRES_USER}:${POSTGRES_PASS}@127.0.0.1:5432/postgis"
 pypgstac migrate --dsn="$dsn"
+for f in contents/*.zstd; do
+    unzstd "$f" -o "$(dirname $f)/$(basename $f .zstd)";
+    rm "$f"
+done
 python ingest.py contents
 
 # stop postgresql
