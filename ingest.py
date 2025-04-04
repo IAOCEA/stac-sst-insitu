@@ -6,9 +6,17 @@ from pypgstac.db import PgstacDB
 from pypgstac.load import Loader, Methods
 
 
+def parse_object(line):
+    try:
+        return json.loads(line)
+    except json.decoder.JSONDecodeError as e:
+        e.add_note(f"Tried to decode value:\n{line}")
+        raise
+
+
 def open_jsonl(path):
     with open(path) as f:
-        return [json.loads(line.strip()) for line in f if line.strip()]
+        return [parse_object(line.strip()) for line in f if line.strip()]
 
 
 @click.command()
